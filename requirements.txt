@@ -1,0 +1,7 @@
+librosa
+matplotlib
+h5py
+tqdm
+intervaltree
+pydub
+we
