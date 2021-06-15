@@ -4,6 +4,7 @@ import h5py
 import tqdm
 import torch
 import random
+import librosa
 import datetime
 import shutil
 import subprocess
@@ -325,3 +326,42 @@ class WavFilesDataset(data.Dataset):
                 logger.debug(f'Saved input {file_path} to {output_file_path}. '
                              f'Wav length: {wav.shape}')
 
+
+class PitchAugmentation:
+    """Randomly shift the pitch of 0.25 to 0.5 seconds"""
+    def __init__(self, args):
+        self.magnitude = args.aug_mag
+        self.sample_rate = args.sample_rate
+
+    def __call__(self, wav):
+        length = wav.shape[0]
+        shift_length = random.randint(length // 4, length // 2) #segment of length between 0.25 and 0.5 seconds
+        shift_start = random.randint(0, length // 2)
+        shift_end = shift_start + shift_length
+        shift_pitch = (np.random.rand() - 0.5) * 2 * self.magnitude
+
+        aug_wav = np.concatenate([wav[:shift_start],
+                              librosa.effects.pitch_shift(wav[shift_start:shift_end], self.sample_rate, shift_pitch), 
+                              wav[shift_end:]])
+
+        return aug_wav
+
+
+class SignAugmentation:
+    #TODO
+    def __init__(self, args):
+        self.sample_rate = args.sample_rate
+
+    def __call__(self, wav):
+        aug_wav = wav
+        return aug_wav
+
+
+class RemixAugmentation:
+    #TODO
+    def __init__(self, args):
+        self.sample_rate = args.sample_rate
+
+    def __call__(self, wav):
+        aug_wav = wav
+        return aug_wav
