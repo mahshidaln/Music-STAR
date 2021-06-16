@@ -6,11 +6,10 @@ from pathlib import Path
 def get_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('--operation-mode', type=str, default=["preprocess", "train", "test"], required=True, nargs='+',
-                        help='What is the operation mode? "preprocess, "train", "test"?')
+    parser.add_argument('--operation-mode', type=str, default=["preprocess", "train", "translate", "analyze"], required=True, nargs='+',
+                        help='What is the operation mode? "preprocess, "train", "translate", "analyze"?')
     parser.add_argument('--train-step', type=int, default=1,
                         help='step 1: single enc-dec training, step 2: music-star encoder training') 
-    
     """
     parser.add_argument('--gpu', type=str, required=True, help='Specify which GPUs to use separated by a comma. Ex: 2,3')
     # Env options:
@@ -35,10 +34,10 @@ def get_parser():
     # Data options
     parser.add_argument('--data-path',
                         type=Path, help='Data path', nargs='+')
-    parser.add_argument('--h5-path',
-                        type=Path, help='HD5 data path')   
     parser.add_argument('--split-path',
-                        type=Path, help='path to train, validation, and test h5 files')                                                
+                        type=Path, help='path to train, validation, and test wav files')                           
+    parser.add_argument('--h5-path',
+                        type=Path, help='HD5 data path of splitted files')                                                
     parser.add_argument('--segment-length', type=int, default=16000,
                         help='Segment length in samples')
     parser.add_argument('--input-rate', type=int, default=44100,
@@ -52,7 +51,11 @@ def get_parser():
     parser.add_argument('--out-channel', type=int, default=1,
                         help='number of output audio channels')               
     parser.add_argument('--stems', type=int, default=3,
-                        help='number of stems including the mixture')                          
+                        help='number of stems including the mixture') 
+    parser.add_argument('--train-ratio', type=int, default=80,
+                        help='ratio of data used for training')                          
+    parser.add_argument('--val-ratio', type=int, default=15,
+                        help='ratio of data used for validation')  
 
     parser.add_argument('--epoch-len', type=int, default=10000,
                         help='number of 1-second segments per epoch') 

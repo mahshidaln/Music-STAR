@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import numpy
+import shutil
 import logging
 import matplotlib
 from pathlib import Path
@@ -95,6 +96,14 @@ def inv_mu_law(x, mu=255.0):
     x = numpy.array(x).astype(numpy.float32)
     y = 2. * (x - (mu+1.)/2.) / (mu+1.) #map to [-1,1]
     return numpy.sign(y) * (1./mu) * ((1. + mu)**numpy.abs(y) - 1.)
+
+
+def copy_files(files, from_path, to_path: Path):
+    for f in files:
+        out_file_path = to_path / f.relative_to(from_path)
+        out_file_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(f, out_file_path)
+
 
 def save_audio(x, path, rate):
     path.parent.mkdir(parents=True, exist_ok=True)
