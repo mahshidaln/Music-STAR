@@ -17,14 +17,13 @@ from pydub import AudioSegment
 from tempfile import NamedTemporaryFile
 
 import utils
-from utils import mu_law
+from utils import mu_law, copy_files
 
 logger = utils.setup_logger(__name__, 'log_wav.log')
 
 
 class WavFilesDataset(data.Dataset):
     """Process the wav audio files"""
-    FILE_TYPES = ['wav']
    
     def __init__(self, args):
         self.path = args.data_path
@@ -37,7 +36,7 @@ class WavFilesDataset(data.Dataset):
         self.in_channel = args.in_channel # 2
         self.out_channel = args.out_channel # 1
 
-        self.file_types = [args.file_type] if args.file_type else self.FILE_TYPES
+        self.file_types = [args.file_type] if args.file_type else ['wav']
         self.file_paths = self.filter_paths(self.path.glob('**/*'), self.file_types)
         
         self.fft_size = args.fft_size
@@ -53,6 +52,11 @@ class WavFilesDataset(data.Dataset):
                     and any(f.name.endswith(suffix) for suffix in file_types)
                     and '__MACOSX' not in f.parts)]
 
+    @staticmethod
+    def filter_stems(all_files, stem_no):
+        """filters the file of specific type (wav)"""
+        return [f for f in all_files
+                if (f.is_file() and f.name[-5]==str(stem_no))]
 
     @staticmethod
     def file_length(file_path):
@@ -227,7 +231,7 @@ class WavFilesDataset(data.Dataset):
 
     def _random_file(self):
         """picks a track randomly and return the specific instrument file"""
-        #track_no = f'{np.random.randint(len(self.file_paths)//3):03}'
+        #track_no = f'{np.random.randint(len(self.file_paths)//args.stems):03}'
         #track_name = f'{track_no}.{part}.wav'
         return random.choice(self.file_paths)
 
@@ -328,9 +332,25 @@ class WavFilesDataset(data.Dataset):
 
 class Splitter:
     """split instrument tracks separately into train, val, and test set"""
-    def __init__(self, args):
+    def __init__(self, args, input_path):
         self.output_path = Path(args.split_path)
-        #TODO
+        input_files = WavFilesDataset.filter_paths(input_path.glob('**/*'), ['wav'])
+        n_train = int(len(input_files)//args.stems * args.train_ratio)
+        n_val = int(len(input_files)//args.stems * args.val_ratio)
+        if n_val == 0:
+            n_val = 1
+        n_test = len(input_files) - n_train - n_val
+        assert n_test > 0
+        stems = []
+        for s in range(args.stems):
+            dst = Path(self.output_path / f'{input_path.name}_{s}')
+            dst.mkdir(exist_ok=True, parents=True)
+            stem_files = WavFilesDataset.filter_stems(input_files, s)
+            random.shuffle(stem_files)
+            copy_files(stem_files[:n_train], input_path, dst / 'train')
+            copy_files(stem_files[n_train:n_train + n_val], input_path, dst / 'val')
+            copy_files(stem_files[n_train + n_val:], input_path, dst / 'test')
+            logger.info('Split stem %s of path %s as follows: Train - %s, Validation - %s, Test - %s', s, input_path.name, n_train, n_val, n_test)      
 
 
 class PitchAugmentation:
