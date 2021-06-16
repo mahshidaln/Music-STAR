@@ -13,8 +13,8 @@ from pathlib import Path
 from scipy.io import wavfile
 from tempfile import NamedTemporaryFile
 
-from .utils import mu_law, setup_logger
-from .audio import WavFilesDataset, PitchAugmentation
+from utils import mu_law, setup_logger
+from audio import WavFilesDataset, PitchAugmentation
 
 logger = setup_logger(__name__, 'log_data.log')
 
@@ -56,24 +56,24 @@ class H5Dataset(data.Dataset):
         f = h5py.File(h5file_path, 'r')
         return  f['wav']
 
-    def _random_file(self, part):
+    def _random_file(self):
         """picks a file randomly and return the specific instrument file"""
-        track_no = f'{np.random.randint(len(self.file_paths)//3):03}'
-        track_name = f'{track_no}.{part}.h5'
-        return Path(track_name)
+        #track_no = f'{np.random.randint(len(self.file_paths)//3):03}'
+        #track_name = f'{track_no}.{part}.h5'
+        return random.choice(self.file_paths)
 
-    def get_random_slice(self, part):
+    def get_random_slice(self):
         """returns the wav data of the selected slice from h5 file"""
-        h5file_path = self._random_file(part)
+        h5file_path = self._random_file()
         dataset = self.read_h5_file(h5file_path)
         return self.read_data(dataset, h5file_path)
 
 
-    def __getitem__(self, part):
+    def __getitem__(self):
         """returns the tensor of the segmented data from the specified part of a track"""
         data_and_aug = None
         while data_and_aug is None:
-            data = self.get_random_slice(part)
+            data = self.get_random_slice()
             if self.augmentation:
                 data_and_aug = [data, self.augmentation(data)]
             else:
@@ -87,41 +87,15 @@ class H5Dataset(data.Dataset):
         return self.epoch_len
 
 
-    def flipSign(self, wav):
-        batch, sources, channels, time = wav.size()
-        if self.training:
-            signs = torch.randint(2, (batch, sources, 1, 1), device=wav.device, dtype=torch.float32)
-            wav = wav * (2 * signs - 1)
-        return wav
-
-
-    def remix(self, wav):
-        batch, streams, channels, time = wav.size()
-        device = wav.device
-
-        if self.training:
-            group_size = self.group_size or batch
-            if batch % group_size != 0:
-                raise ValueError(f"Batch size {batch} must be divisible by group size {group_size}")
-            groups = batch // group_size
-            wav = wav.view(groups, group_size, streams, channels, time)
-            permutations = torch.argsort(torch.rand(groups, group_size, streams, 1, 1, device=device),
-                                      dim=1)
-            wav = wav.gather(1, permutations.expand(-1, -1, -1, channels, time))
-            wav = wav.view(batch, streams, channels, time)
-        return wav
-
-
-
 class Dataset:
     """return the train and validation dataset"""
-    def __init__(self, args):
+    def __init__(self, args, domain_path):
         if args.data_aug:
             augmentation = PitchAugmentation(args)
         else:
             augmentation = None
 
-        self.train_dataset = H5Dataset(args, args.split_path / 'train', augmentation=augmentation)
+        self.train_dataset = H5Dataset(args, domain_path / 'train', augmentation=augmentation)
         self.train_loader = data.DataLoader(self.train_dataset,
                                             batch_size=args.batch_size,
                                             num_workers=args.num_workers,
@@ -129,7 +103,7 @@ class Dataset:
 
         self.train_iter = iter(self.train_loader)
 
-        self.valid_dataset = H5Dataset(args, args.split_path / 'val', augmentation=augmentation)
+        self.valid_dataset = H5Dataset(args, domain_path / 'val', augmentation=augmentation)
         self.valid_loader = data.DataLoader(self.valid_dataset,
                                             batch_size=args.batch_size,
                                             num_workers=args.num_workers // 10 + 1,

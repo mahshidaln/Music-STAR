@@ -225,11 +225,11 @@ class WavFilesDataset(data.Dataset):
         return datetime.timedelta(seconds=duration/3)
 
 
-    def _random_file(self, part):
+    def _random_file(self):
         """picks a track randomly and return the specific instrument file"""
-        track_no = f'{np.random.randint(len(self.file_paths)//3):03}'
-        track_name = f'{track_no}.{part}.wav'
-        return Path(track_name)
+        #track_no = f'{np.random.randint(len(self.file_paths)//3):03}'
+        #track_name = f'{track_no}.{part}.wav'
+        return random.choice(self.file_paths)
 
 
     def file_segment(self, data_path, start_time):
@@ -257,9 +257,9 @@ class WavFilesDataset(data.Dataset):
             return wav
 
 
-    def random_file_segment(self, part):
+    def random_file_segment(self):
         """picks a file randomly and segment a random slice"""
-        file = self._random_file(part)
+        file = self._random_file()
         file_length_sec = self.file_length(file)
         segment_length_sec = self.segment_length / self.sample_rate
         start_time = random.random() * (file_length_sec - segment_length_sec * 2)  # just in case
@@ -271,11 +271,11 @@ class WavFilesDataset(data.Dataset):
         return file, file_length_sec, start_time, wav_data
 
 
-    def get_random_slice(self, part):
+    def get_random_slice(self):
         """returns the wav data of the selected slice"""
         wav_data = None
         while wav_data is None or len(wav_data) != self.segment_length:         
-            file, file_length_sec, start_time, wav_data = self.random_file_segment(part)
+            file, file_length_sec, start_time, wav_data = self.random_file_segment()
         logger.debug('Sample: File: %s, File length: %s, Start time: %s',
                     file, file_length_sec, start_time)
 
@@ -287,9 +287,9 @@ class WavFilesDataset(data.Dataset):
         return self.epoch_length 
 
 
-    def __getitem__(self, part):
+    def __getitem__(self):
         """returns the tensor of the segmented data from the specified part of a track"""
-        wav = self.get_random_slice(part)
+        wav = self.get_random_slice()
         return torch.FloatTensor(wav)
 
    
@@ -325,6 +325,12 @@ class WavFilesDataset(data.Dataset):
 
                 logger.debug(f'Saved input {file_path} to {output_file_path}. '
                              f'Wav length: {wav.shape}')
+
+class Splitter:
+    """split instrument tracks separately into train, val, and test set"""
+    def __init__(self, args):
+        self.output_path = Path(args.split_path)
+        #TODO
 
 
 class PitchAugmentation:
@@ -365,3 +371,5 @@ class RemixAugmentation:
     def __call__(self, wav):
         aug_wav = wav
         return aug_wav
+
+
