@@ -84,7 +84,7 @@ class H5Dataset(data.Dataset):
 
 
     def __len__(self):
-        return self.epoch_len
+        return self.epoch_length
 
 
 class Dataset:

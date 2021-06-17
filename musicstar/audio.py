@@ -61,7 +61,7 @@ class WavFilesDataset(data.Dataset):
     @staticmethod
     def file_length(file_path):
         """returns the length of the wav file"""
-        output = subprocess.run(['/local/scratch/mahshid/bin/ffprobe',
+        output = subprocess.run(['ffprobe',
                                  '-show_entries', 'format=duration',
                                  '-v', 'quiet',
                                  '-print_format', 'compact=print_section=0:nokey=1:escape=csv',
@@ -111,7 +111,7 @@ class WavFilesDataset(data.Dataset):
                 file = f'{name}.{i}.wav'
                 if(replace):
                     with NamedTemporaryFile() as output_file:
-                        subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
+                        subprocess.run(['ffmpeg',
                         '-i', f'{data_path}/{file}',
                         '-y',
                         '-ss', str(0),
@@ -129,7 +129,7 @@ class WavFilesDataset(data.Dataset):
                 else:  
                     output = Path(data_path.parent / 'trim')
                     output.mkdir(parents=True, exist_ok=True)                      
-                    subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
+                    subprocess.run(['ffmpeg',
                         '-i', f'{data_path}/{file}',
                         '-ss', str(0),
                         '-to', str(min_length),
@@ -147,7 +147,7 @@ class WavFilesDataset(data.Dataset):
 
         for i in range(0, self.parts):
             file = f'{str(track_path)}/{track_name}.{i}.wav'
-            output = subprocess.Popen(['/local/scratch/mahshid/bin/ffmpeg',
+            output = subprocess.Popen(['ffmpeg',
                                 '-i', file,
                                 '-af', f'silencedetect=n=-40dB:d={duration},ametadata=print:file=-',
                                 '-f', 'null',
@@ -241,7 +241,7 @@ class WavFilesDataset(data.Dataset):
         length_sec = self.segment_length / self.sample_rate
         length_sec += .01  # just in case
         with NamedTemporaryFile() as output_file:
-            output = subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
+            output = subprocess.run(['ffmpeg',
                                      '-v', 'quiet',
                                      '-y',  # overwrite
                                      '-ss', str(start_time),
@@ -305,7 +305,7 @@ class WavFilesDataset(data.Dataset):
 
             with NamedTemporaryFile(suffix='.wav') as output_wav_file:
                 logger.debug(f'Converting {file_path} to {output_wav_file.name}')
-                subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
+                subprocess.run(['ffmpeg',
                                 '-v', 'quiet',
                                 '-y', 
                                 '-i', file_path,

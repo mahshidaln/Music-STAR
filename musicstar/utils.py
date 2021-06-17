@@ -24,23 +24,20 @@ def setup_logger(logger_name, filename):
     return logger
 
 
-def train_logger(opt, path: Path):
+def train_logger(args, path: Path):
     """Logger for training"""
 
-    if not path.exists():
-        path.mkdir(parents=True, exist_ok=True)
-
-    if hasattr(opt, 'rank'):
-        filepath = path / f'main_{opt.rank}.log'
+    if hasattr(args, 'rank'):
+        filepath = path / f'main_{args.rank}.log'
     else:
         filepath = path / 'main.log'
 
-    if hasattr(opt, 'rank') and opt.rank != 0:
-        sys.stdout = open(path / f'stdout_{opt.rank}.log', 'w')
-        sys.stderr = open(path / f'stderr_{opt.rank}.log', 'w')
+    if hasattr(args, 'rank') and args.rank != 0:
+        sys.stdout = open(path / f'stdout_{args.rank}.log', 'w')
+        sys.stderr = open(path / f'stderr_{args.rank}.log', 'w')
 
     # Safety check
-    if filepath.exists() and not opt.checkpoint:
+    if filepath.exists() and not args.checkpoint:
         logging.warning("Experiment already exists!")
 
     class TrainLogFormatter:
