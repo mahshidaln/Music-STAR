@@ -288,7 +288,7 @@ class WavFilesDataset(data.Dataset):
 
     def __len__(self):
         """get number of data samples"""
-        return self.epoch_length 
+        return self.epoch_length
 
 
     def __getitem__(self):

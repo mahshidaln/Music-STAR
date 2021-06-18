@@ -1,8 +1,11 @@
 import os
 import sys
 import time
+import errno
 import numpy
 import shutil
+import socket
+import random
 import logging
 import matplotlib
 from pathlib import Path
@@ -112,3 +115,15 @@ def save_wav_image(wav, path):
     plt.figure(figsize=(15, 5))
     plt.plot(wav)
     plt.savefig(path)
+
+def free_port(host='', low=20000, high=40000):
+    sock = socket.socket()
+    while True:
+        port = random.randint(low, high)
+        try:
+            sock.bind((host, port))
+        except OSError as error:
+            if error.errno == errno.EADDRINUSE:
+                continue
+            raise
+        return port
