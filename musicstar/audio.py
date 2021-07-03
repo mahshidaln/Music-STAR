@@ -27,6 +27,7 @@ class WavFilesDataset(data.Dataset):
    
     def __init__(self, args):
         self.path = args.data_path
+        self.parts = args.stems
         self.epoch_length = args.epoch_length #10000 seconds
         self.segment_length = args.segment_length #16000
 
@@ -37,7 +38,7 @@ class WavFilesDataset(data.Dataset):
         self.out_channel = args.out_channel # 1
 
         self.file_types = [args.file_type] if args.file_type else ['wav']
-        self.file_paths = self.filter_paths(self.path.glob('**/*'), self.file_types)
+        self.file_paths = self.filter_paths(self.path.glob('**/*'), 'wav')
         
         self.fft_size = args.fft_size
         self.windows_length = args.windows_length
@@ -61,7 +62,7 @@ class WavFilesDataset(data.Dataset):
     @staticmethod
     def file_length(file_path):
         """returns the length of the wav file"""
-        output = subprocess.run(['ffprobe',
+        output = subprocess.run(['/local/scratch/mahshid/bin/ffprobe',
                                  '-show_entries', 'format=duration',
                                  '-v', 'quiet',
                                  '-print_format', 'compact=print_section=0:nokey=1:escape=csv',
@@ -91,7 +92,7 @@ class WavFilesDataset(data.Dataset):
         for f in sorted(os.listdir(data_path)):        
             track_name = f[0:3]
             if(prev_track != track_name):
-                durations = self.parts_duration(data_path, track_name, self.parts)
+                durations = self.parts_duration(data_path, track_name)
                 if (len(set(durations)) > 1):
                     if (log):
                         logger.info(f'Track No. {track_name}. ' f'File lengths: {durations}')
@@ -102,7 +103,7 @@ class WavFilesDataset(data.Dataset):
 
     def audio_trim(self, data_path, replace=True):
         """trims the end of audio parts to achieve equal length"""
-        to_trim = self.parts_duration_compare(data_path, self.parts, False)
+        to_trim = self.parts_duration_compare(data_path, False)
         for name, ps in tqdm.tqdm(to_trim.items()):
             min_length = min(ps)
             max_length = max(ps)
@@ -111,7 +112,7 @@ class WavFilesDataset(data.Dataset):
                 file = f'{name}.{i}.wav'
                 if(replace):
                     with NamedTemporaryFile() as output_file:
-                        subprocess.run(['ffmpeg',
+                        subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
                         '-i', f'{data_path}/{file}',
                         '-y',
                         '-ss', str(0),
@@ -129,13 +130,17 @@ class WavFilesDataset(data.Dataset):
                 else:  
                     output = Path(data_path.parent / 'trim')
                     output.mkdir(parents=True, exist_ok=True)                      
-                    subprocess.run(['ffmpeg',
+                    subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
                         '-i', f'{data_path}/{file}',
                         '-ss', str(0),
                         '-to', str(min_length),
                         '-c', 'copy',
                         f'{output}/{file}'
-                        ])  
+                        ])
+       
+        if(not replace):
+            return Path(data_path.parent / 'trim')
+        return data_path
     
 
     def parts_silence_detect(self, track_path, track_name, duration=1):
@@ -147,7 +152,7 @@ class WavFilesDataset(data.Dataset):
 
         for i in range(0, self.parts):
             file = f'{str(track_path)}/{track_name}.{i}.wav'
-            output = subprocess.Popen(['ffmpeg',
+            output = subprocess.Popen(['/local/scratch/mahshid/bin/ffmpeg',
                                 '-i', file,
                                 '-af', f'silencedetect=n=-40dB:d={duration},ametadata=print:file=-',
                                 '-f', 'null',
@@ -186,12 +191,15 @@ class WavFilesDataset(data.Dataset):
  
 
     def silence_remove(self, data_path, replace=True):
-        """removes the silence and synch all the parts"""
+        """removes the silence of the most silent instrument and synch all the parts.
+           can call it multiple times to remove the silence of the second most silent instruments
+        """
+
         logger.info('parts duration after removing silence')
         for f in tqdm.tqdm(sorted(os.listdir(data_path))):        
             track_name = f[0:3]
-            durations = self.parts_duration(data_path, track_name, self.parts)
-            starts, ends, durations, total = self.parts_silence_detect(data_path, track_name, self.parts, 1)
+            lengths = self.parts_duration(data_path, track_name)
+            starts, ends, durations, total = self.parts_silence_detect(data_path, track_name, 1)
             
             most_silence = max(total)
             most_silent = total.index(most_silence)  
@@ -202,7 +210,7 @@ class WavFilesDataset(data.Dataset):
             if(len(s_starts) == 0):
                 continue
             elif(len(s_starts) == len(s_ends)+1):
-                s_ends.append(durations[0])
+                s_ends.append(lengths[0])
                 #s_durations.append(durations[0]) 
             for p in range(self.parts):
                 file = f'{track_name}.{p}.wav'
@@ -211,13 +219,17 @@ class WavFilesDataset(data.Dataset):
                     output_file = wav[:s_starts[0]*1000]
                     for e in range(len(s_ends)-1):
                         output_file = output_file + wav[s_ends[e]*1000:s_starts[e+1]*1000]
-                    output_file = output_file + wav[s_ends[len(s_ends)-1]*1000:durations[0]*1000]
+                    output_file = output_file + wav[s_ends[-1]*1000:lengths[0]*1000]
                     output_file.export(f'{data_path}/{file}', 'wav')
                 else:  
                     output = Path(data_path.parent / 'no_silence')
                     output.mkdir(parents=True, exist_ok=True)                      
                     #TODO 
-            logger.info(f'Track No. {track_name}. ' f'File lengths: {self.parts_duration(data_path, track_name, self.parts)}')       
+            logger.info(f'Track No. {track_name}. ' f'File lengths: {self.parts_duration(data_path, track_name)}')       
+        
+        if(not replace):
+            return Path(data_path.parent / 'no_silence')
+        return data_path
 
 
     def total_duration(self, data_path):
@@ -241,7 +253,7 @@ class WavFilesDataset(data.Dataset):
         length_sec = self.segment_length / self.sample_rate
         length_sec += .01  # just in case
         with NamedTemporaryFile() as output_file:
-            output = subprocess.run(['ffmpeg',
+            output = subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
                                      '-v', 'quiet',
                                      '-y',  # overwrite
                                      '-ss', str(start_time),
@@ -305,7 +317,7 @@ class WavFilesDataset(data.Dataset):
 
             with NamedTemporaryFile(suffix='.wav') as output_wav_file:
                 logger.debug(f'Converting {file_path} to {output_wav_file.name}')
-                subprocess.run(['ffmpeg',
+                subprocess.run(['/local/scratch/mahshid/bin/ffmpeg',
                                 '-v', 'quiet',
                                 '-y', 
                                 '-i', file_path,
