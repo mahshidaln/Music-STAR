@@ -76,11 +76,12 @@ class WavFilesDataset(data.Dataset):
     def parts_duration(self, file_path, file_name):
         """returns the length of all parts of a track"""
         durations = []
-        for i in range(0, self.parts):
+        for i in self.parts:
             file = f'{str(file_path)}/{file_name}.{i}.wav'
             file_len = self.file_length(file)
-            duration = float("{:.1f}".format(file_len))
-            durations.append(duration)
+            #duration = float("{:.1f}".format(file_len))
+            durations.append(file_len)
+        #print(durations)    
         return durations
 
 
@@ -104,11 +105,13 @@ class WavFilesDataset(data.Dataset):
     def audio_trim(self, data_path, replace=True):
         """trims the end of audio parts to achieve equal length"""
         to_trim = self.parts_duration_compare(data_path, False)
+        #print(to_trim)
         for name, ps in tqdm.tqdm(to_trim.items()):
             min_length = min(ps)
             max_length = max(ps)
             min_arg = ps.index(min(ps))
-            for i in range(self.parts):
+            int_min_length = int(min_length)
+            for i in self.parts:
                 file = f'{name}.{i}.wav'
                 if(replace):
                     with NamedTemporaryFile() as output_file:
@@ -116,7 +119,7 @@ class WavFilesDataset(data.Dataset):
                         '-i', f'{data_path}/{file}',
                         '-y',
                         '-ss', str(0),
-                        '-to', str(min_length),
+                        '-to', str(int_min_length),
                         '-c', 'copy',
                         '-f', 'wav',
                         '-ar', str(self.input_rate), 
@@ -150,7 +153,7 @@ class WavFilesDataset(data.Dataset):
         s_ends = []
         s_total = []
 
-        for i in range(0, self.parts):
+        for i in self.parts:
             file = f'{str(track_path)}/{track_name}.{i}.wav'
             output = subprocess.Popen(['/local/scratch/mahshid/bin/ffmpeg',
                                 '-i', file,
@@ -178,9 +181,10 @@ class WavFilesDataset(data.Dataset):
                 elif('duration' in item[0]):
                     durations.append(float(item[1]))
                     total += float(item[1])
+                    print('t', total)
                 elif('end' in item[0]):
                     ends.append(float(item[1]))
-                
+
 
             s_starts.append(starts)
             s_ends.append(ends)
@@ -200,19 +204,22 @@ class WavFilesDataset(data.Dataset):
             track_name = f[0:3]
             lengths = self.parts_duration(data_path, track_name)
             starts, ends, durations, total = self.parts_silence_detect(data_path, track_name, 1)
-            
+
+            for p in self.parts:
+                if(len(starts[p]) == len(ends[p])+1):
+                    ends[p].append(lengths[p])
+                    total[p] = total[p] + lengths[p] - starts[p][-1]
+
             most_silence = max(total)
             most_silent = total.index(most_silence)  
-
+ 
             s_starts = starts[most_silent]
             s_ends = ends[most_silent]      
 
             if(len(s_starts) == 0):
                 continue
-            elif(len(s_starts) == len(s_ends)+1):
-                s_ends.append(lengths[0])
-                #s_durations.append(durations[0]) 
-            for p in range(self.parts):
+
+            for p in self.parts:
                 file = f'{track_name}.{p}.wav'
                 wav = AudioSegment.from_wav(f'{data_path}/{file}')
                 if(replace):
