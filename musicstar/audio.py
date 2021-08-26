@@ -69,7 +69,11 @@ class WavFilesDataset(data.Dataset):
                                  str(file_path)],
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE).stdout
-        duration = float(output)
+        try:                                
+            duration = float(output)
+        except ValueError:
+            duration = 0
+            logger.error(f'The file from {file_path} is empty')
         return duration
 
 
@@ -80,8 +84,7 @@ class WavFilesDataset(data.Dataset):
             file = f'{str(file_path)}/{file_name}.{i}.wav'
             file_len = self.file_length(file)
             #duration = float("{:.1f}".format(file_len))
-            durations.append(file_len)
-        #print(durations)    
+            durations.append(file_len)    
         return durations
 
 
@@ -89,7 +92,6 @@ class WavFilesDataset(data.Dataset):
         """returns the tracks that should be trimmed for equal length"""
         to_trim = {}
         prev_track = ''
-        logger.info('Parts Duration')
         for f in sorted(os.listdir(data_path)):        
             track_name = f[0:3]
             if(prev_track != track_name):
@@ -105,7 +107,6 @@ class WavFilesDataset(data.Dataset):
     def audio_trim(self, data_path, replace=True):
         """trims the end of audio parts to achieve equal length"""
         to_trim = self.parts_duration_compare(data_path, False)
-        #print(to_trim)
         for name, ps in tqdm.tqdm(to_trim.items()):
             min_length = min(ps)
             max_length = max(ps)
@@ -181,7 +182,6 @@ class WavFilesDataset(data.Dataset):
                 elif('duration' in item[0]):
                     durations.append(float(item[1]))
                     total += float(item[1])
-                    print('t', total)
                 elif('end' in item[0]):
                     ends.append(float(item[1]))
 
@@ -198,8 +198,6 @@ class WavFilesDataset(data.Dataset):
         """removes the silence of the most silent instrument and synch all the parts.
            can call it multiple times to remove the silence of the second most silent instruments
         """
-
-        logger.info('parts duration after removing silence')
         for f in tqdm.tqdm(sorted(os.listdir(data_path))):        
             track_name = f[0:3]
             lengths = self.parts_duration(data_path, track_name)
