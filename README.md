@@ -1,2 +1,2 @@
 # Music-STAR
-a Style Transforming system for Audio-based Rearrangement
+a Style Translation system for Audio-based Rearrangement
