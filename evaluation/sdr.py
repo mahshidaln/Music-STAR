@@ -39,7 +39,7 @@ def main():
                 refa, _ = librosa.load(reference, SR)
                 sdr = SDR(outa, refa)
                 df.at[j, f'{d}.{dom}'] = sdr       
-    df.to_csv('./sdr2.csv')
+    df.to_csv('./sdr.csv')
 
 
 if __name__ == "__main__":
