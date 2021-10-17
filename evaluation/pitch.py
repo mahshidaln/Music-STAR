@@ -59,7 +59,7 @@ def main():
                 refa, _ = librosa.load(reference, SR)
                 jaccard = pitch_jaccard(outa, refa)
                 df.at[j, f'{d}.{dom}'] = jaccard       
-    df.to_csv('./lsd.csv')
+    df.to_csv('./pitch.csv')
                 
 
 if __name__ == "__main__":
