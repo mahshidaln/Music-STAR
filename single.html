@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Mahshid</title>
+<!-- Bootstrap Core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="css/theme.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<!-- Navigation -->
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+		<i class="fa fa-bars"></i>
+		</button>
+		<!--
+		<a class="navbar-brand page-scroll" href="index.html">
+		ARIES
+		</a>-->
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="index.html">Home</a>
+			</li>
+			<li>
+			<a href="single.html#single">Single-Instrument</a>
+			</li>
+			<li>
+			<a href="separation.html#separation">Separation-based</a>
+			</li>
+			<li>
+			<a href="embedding.html#embedding">Embedding-supervised</a>
+			</li>
+			<li>
+			<a href="eval.html#eval">Evaluation</a>
+			</li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+<!-- Intro Header -->
+<header class="intro">
+<div class="intro-body">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<h1 class="brand-heading">Music-STAR</h1>
+				<p class="intro-text">
+					A Style Translation System for Audio-based Re-instrumentation
+				</p>
+				<a href="#star" class="btn btn-circle page-scroll">
+				<i class="fa fa-angle-double-down animated"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</header>
+<!-- Project Details Section -->
+<section id="single">
+<div class="container content-section">
+	<div class="row">
+		<h3 class="col-lg-10 col-lg-offset-1">Single-Instrument Translation Pipeline</h3>
+		<div class="col-lg-10 col-lg-offset-1">
+			<p>
+				The following tables include the results obtained by applying single-instrument translation and then mixing the outputs.
+			</p>
+			<p style="margin-left: 25px; font-size: 18px;">
+				Clarinet-Vibraphone to Strings-Piano:
+			</p>
+
+			<table class="audio-table" style="margin-bottom: 40px;">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Input Clarinet </th>
+						<th> Input Vibraphone </th>
+						<th> Target String </th>
+						<th> Target Piano </th>
+						<th> Target Mixture </th>
+						<th> Gold Standard </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<h7>Pirates of Caribbean Theme</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/7tj2tb60qg33ugb/001.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/sjaq8j2g4oo7ox4/001.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/nw9t3lpp4c1w78p/001.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/nzlvzoe75jo5c5j/001.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/t5cjsyozrjbeg3y/001.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/x256273foj6fkqx/001.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+
+					</tr>
+
+					<tr>
+						<td>
+							<h7>My Heart Will Go on</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2yzd4eckvrbknbx/002.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/mi5nxhun7nfncaa/002.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/rzxj2395ooy58l9/002.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/qrw89q74gp11wy6/002.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/qiqulapa7qfjdb6/002.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/4r54kpwfhlf300c/002.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Beethoven's String</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/rpcue7axkg33oca/003.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/eokmvjf7x9otxpm/003.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/lkqcx9qwwmvmvby/003.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/g9wflhtty65mp3z/003.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/1puecn67zlgucl2/003.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/oz26bb3bh1yyyqh/003.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Moonlight Sonata</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/wxci3ewl5frcyly/004.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/n746ddcefnl4211/004.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/n1lk7323w7ws9z2/004.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/4yeiukagygvp206/004.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/n1vheu7w834m3jk/004.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/5r91ur187q5py14/004.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Fur Elise</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/o6qpojoflqgx220/005.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/6zm1kkn3nmmemxy/005.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2imgbisf2qbjlya/005.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/3k16vuqbk440mk2/005.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/bguv49grhjnudrj/005.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/h48079mlutn1id5/005.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Brahms's Clarinet</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/icdvfzdqwmu6ev6/006.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/yv2bllx23yhcwox/006.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/wzf260f3i95n5z8/006.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/1xcmrguigcufxmm/006.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/acx7aty7f90i946/006.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/xqx07v0l5n4bd7s/006.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Beethoven's Piano</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/iy46lbs048ehif9/007.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/8ykoi3mehg2kf27/007.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/cumim4gxn9k4uj4/007.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/ym167u8lkas8ilq/007.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/twq35d8z4b0ujsb/007.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/6q82xrxux6pplky/007.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Dvorak's String</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2kiigd47h61lo1r/008.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/ai61qnpsz71gvgm/008.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/oaxcme1zv5oipnf/008.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/8ug0nm4bq7ohtqg/008.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/4kf816arr4f60to/008.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/fpjxnhh41pu46e2/008.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Romeo and Juliet</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/1i8yltl6vm0zlm8/009.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/o3ys5loqmxd7tks/009.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/3m1lxxmx61lr7r6/009.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/nfcmwbh89hz7wka/009.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/8p1yup8xsqxqifu/009.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/lfzjww9ub5z24y7/009.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Nuvole Blanche</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/elo63im8h6ohx9q/010.1.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/encjbxgvhz8kchn/010.2.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/vqnnynguam2v4gq/010.1_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/zrrx5g0aycxi5qd/010.2_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/50cloma4sy8rc5z/010.3_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/88wcm84zkz65y8y/010.3.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<p style="margin-left: 25px; font-size: 18px;">
+				Strings-Piano to Clarinet-Vibraphone:
+			</p>
+
+			<table class="audio-table" style="margin-bottom: 40px;">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Input String </th>
+						<th> Input Piano </th>
+						<th> Target Clarinet </th>
+						<th> Target Vibraphone </th>
+						<th> Target Mixture </th>
+						<th> Gold Standard </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<h7>Pirates of Caribbean Theme</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2ptbahqp7jckl8z/001.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/wmizei571b9vmm5/001.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/62v00bc2af03bnr/001.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/sxn8lfpyzkwvvdz/001.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/whromk0wlo33kcy/001.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/9m120cn1ksvsk07/001.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+
+					</tr>
+
+					<tr>
+						<td>
+							<h7>My Heart Will Go on</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/56b7yrh97bp03rb/002.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/d9sulqv7effl5ya/002.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/bskjc92dlaub2sw/002.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/6wktegl5jmy0fx4/002.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/zl072sqfeznbyzk/002.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/v857v4qdzc99v27/002.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Beethoven's String</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/3jl6kj165hn7j05/003.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/mdvc3yoriglo3et/003.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/0xzmap3aveooo1a/003.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/ujozwuox91jxdx8/003.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/jq88ygqfuf304tn/003.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/k4pez8esl9zcato/003.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Moonlight Sonata</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/3nqmkgmptj117i6/004.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/st6s45xs99et0zk/004.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/20a3hsii0o4kdjw/004.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/dkq8ls0n8thurpe/004.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/t3ho5vc8hujlvw4/004.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/z17bwtdqdie5434/004.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Fur Elise</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2e05yqcmidk85c3/005.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/36ky1hk6gbb1uhr/005.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/zn4msj9jy482lsu/005.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/x349otmtrv5c7qx/005.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/2ahkz02v5hdcyup/005.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/9n4xp782hszn0qp/005.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Brahms's Clarinet</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/9pj003nk9dpt3gh/006.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/6stje3it0p1sc8s/006.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/sp3hnym18xzywrt/006.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/pdxc23rvio5im4a/006.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/evi9fbtwab5aznb/006.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/0zu9kxz6qaawk3x/006.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Beethoven's Piano</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/pepazt08micfz0f/007.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/xmqh1wyl9epmr3d/007.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/3a7g3damjhheezd/007.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/hglbt1w25jgy15v/007.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/g7g8b145aoos1y7/007.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/13zjwyfu2b60pk2/007.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Dvorak's String</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/o5dyb28onutdox0/008.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/74wc0liydfgaagn/008.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/xflpxu4oartc0j8/008.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/w8mm0bbo0sz0n4n/008.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/q1y2nopcmm1enuw/008.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/uvmrziujlwg1k32/008.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Romeo and Juliet</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/mnle0vyvgf5xle7/009.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/a46ftfesw31im4o/009.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/c4ic241n2ob59bp/009.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/6w3kzk36vprxsis/009.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/jc0q9gb3v0jruno/009.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/z9zftxnxyxd2mxl/009.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<h7>Nuvole Blanche</h7>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/s12hypx9t4bi6x8/010.4.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/kwflak5dt05fx1u/010.5.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/k619bx5tz7jha27/010.4_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/cp26qmgatxo9sbs/010.5_0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/cx8wtzk2fwkjbrn/010.0_t.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+						<td>
+							<audio class="my_audio"src="https://dl.dropboxusercontent.com/s/4ycyrt46uxy21rh/010.0.wav?raw=1" controls="" preload="none"></audio>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+</section>
+<!-- Footer -->
+<footer>
+<div class="container text-center">
+	<p class="credits">
+		Copyright &copy; 2022 Mahshid Alinoori. All Rights Reserved.
+	</p>
+</div>
+</footer>
+<!-- jQuery -->
+<script src="js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Plugin JavaScript -->
+<script src="js/jquery.easing.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="js/theme.js"></script>
+</body>
+</html>
