@@ -1,0 +1,54 @@
+{
+  "checkpoint": {
+    "checkpoint_root": "checkpoints"
+  },
+  "data": {
+    "batch_size": 32,
+    "data": [],
+    "data_aug": false,
+    "epoch_length": 10000,
+    "h5_dataset_name": "wav",
+    "num_workers": 10,
+    "segment_length": 16000
+  },
+  "description": "Universal Music Translation base recipe with reconstruction CE plus adversarial latent discriminator.",
+  "loss": {
+    "adversarial_weight": 0.01,
+    "discriminator": "latent_domain_cross_entropy",
+    "reconstruction": "mu_law_cross_entropy"
+  },
+  "metadata": {
+    "source_procedures": [
+      "universal adversarial translation training",
+      "single-instrument baseline training"
+    ]
+  },
+  "model": {
+    "blocks": 4,
+    "d_channels": 100,
+    "d_lambda": 0.01,
+    "d_layers": 3,
+    "encoder_blocks": 3,
+    "encoder_channels": 128,
+    "encoder_func": "relu",
+    "encoder_layers": 10,
+    "encoder_pool": 800,
+    "kernel_size": 2,
+    "latent_d": 128,
+    "p_dropout_discriminator": 0.0,
+    "residual_channels": 128,
+    "skip_channels": 128
+  },
+  "name": "recipe_universal_adversarial",
+  "optim": {
+    "grad_clip": null,
+    "lr": 0.0001,
+    "lr_decay": 0.98
+  },
+  "recipe": "universal_adversarial",
+  "runtime": {
+    "device": null,
+    "epochs": 10000,
+    "seed": 1
+  }
+}

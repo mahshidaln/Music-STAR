@@ -1,0 +1,50 @@
+{
+  "checkpoint": {
+    "checkpoint_root": "checkpoints"
+  },
+  "data": {
+    "batch_size": 16,
+    "data": [],
+    "epoch_length": 10000,
+    "h5_dataset_name": "wav",
+    "num_workers": 10,
+    "segment_length": 16000,
+    "target": "data/reduced/target_mix"
+  },
+  "description": "Music-STAR mixture-supervised method: encode source mixture and reconstruct the target mixture with teacher forcing.",
+  "loss": {
+    "reconstruction": "mu_law_cross_entropy"
+  },
+  "metadata": {
+    "paper_section": "3.4, 4.4",
+    "source_procedures": [
+      "mixture-supervised WaveNet reconstruction",
+      "paired source-mixture and target-mixture dataset loading"
+    ]
+  },
+  "model": {
+    "blocks": 4,
+    "encoder_blocks": 4,
+    "encoder_channels": 128,
+    "encoder_func": "relu",
+    "encoder_layers": 14,
+    "encoder_pool": 800,
+    "kernel_size": 2,
+    "latent_d": 64,
+    "legacy_encoder": true,
+    "residual_channels": 128,
+    "skip_channels": 128
+  },
+  "name": "recipe_music_star_mixture_supervised",
+  "optim": {
+    "grad_clip": null,
+    "lr": 0.0003,
+    "lr_decay": 0.99
+  },
+  "recipe": "music_star_mixture_supervised",
+  "runtime": {
+    "device": null,
+    "epochs": 100,
+    "seed": 1
+  }
+}

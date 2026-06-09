@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "music-star"
+version = "0.1.0"
+description = "Music-STAR: Style Translation for Audio-based Re-instrumentation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE.md" }
+authors = [
+  { name = "Mahshid Alinoori" },
+  { name = "Vassilios Tzerpos" },
+]
+dependencies = [
+  "librosa",
+  "matplotlib",
+  "h5py",
+  "tqdm",
+  "intervaltree",
+  "pydub",
+  "numpy<2",
+  "scipy",
+  "torch>=2.0,<2.3; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+  "torch>=2.0; sys_platform != 'darwin' or platform_machine != 'x86_64'",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy",
+  "pre-commit",
+  "pytest",
+  "ruff",
+]
+
+[project.scripts]
+music-star = "music_star.__main__:main"
+music-star-configs = "music_star.cli:configs_main"
+music-star-generate = "music_star.translate:main"
+music-star-smoke = "music_star.smoke:main"
+music-star-train = "music_star.launch:main"
+music-star-train-config = "music_star.train:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["music_star*"]
+
+[tool.setuptools.package-data]
+music_star = ["configs/*.json", "evaluation/triplets_*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+exclude = [
+  ".cache",
+  ".git",
+  "__pycache__",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = [
+  "B008",
+  "E501",
+  "UP006",
+  "UP007",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.9"
+files = ["music_star", "tests"]
+ignore_missing_imports = true
+follow_imports = "silent"
+no_strict_optional = true
+warn_unused_ignores = true
+exclude = [
+  "^\\.cache/",
+  "^\\.venv/",
+]

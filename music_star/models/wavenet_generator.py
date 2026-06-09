@@ -1,4 +1,4 @@
-# From https://github.com/facebookresearch/music-translation
+"""Pure PyTorch autoregressive generation for conditional WaveNet decoders."""
 
 import logging
 import time
@@ -9,16 +9,24 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
 
-from wavenet import WaveNet
+from music_star.models.wavenet import WaveNet
 
 
 class QueuedConv1d(nn.Module):
+    """Stateful convolution wrapper for sample-by-sample generation.
+
+    Parameters
+    ----------
+    conv : torch.nn.Conv1d | QueuedConv1d
+        Convolution to wrap or clone.
+    data : torch.Tensor
+        Initial queue tensor with shape ``(batch, channels, 1)``.
+    """
+
     def __init__(self, conv, data):
         super().__init__()
         if isinstance(conv, nn.Conv1d):
-            self.inner_conv = nn.Conv1d(
-                conv.in_channels, conv.out_channels, conv.kernel_size
-            )
+            self.inner_conv = nn.Conv1d(conv.in_channels, conv.out_channels, conv.kernel_size)
             self.init_len = conv.padding[0]
             self.inner_conv.weight.data.copy_(conv.weight.data)
             self.inner_conv.bias.data.copy_(conv.bias.data)
@@ -36,18 +44,52 @@ class QueuedConv1d(nn.Module):
         self.init_queue(data)
 
     def init_queue(self, data):
+        """Reset the causal queue.
+
+        Parameters
+        ----------
+        data : torch.Tensor
+            Initial queue value with shape ``(batch, channels, 1)``.
+        """
+
         self.queue = deque([data[:, :, 0:1]] * self.init_len, maxlen=self.init_len)
 
     def forward(self, x):
+        """Apply queued convolution to one time step.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input with shape ``(batch, channels, 1)``.
+
+        Returns
+        -------
+        torch.Tensor
+            Convolution output for the current time step.
+        """
+
         y = x
         x = torch.cat([self.queue[0], x], dim=2)
-        # import pdb; pdb.set_trace()
         self.queue.append(y)
 
         return self.inner_conv(x)
 
 
 class WavenetGenerator(nn.Module):
+    """Autoregressive generator for trained WaveNet decoders.
+
+    Parameters
+    ----------
+    wavenet : WaveNet
+        Trained decoder to run autoregressively.
+    batch_size : int, optional
+        Generation batch size.
+    cond_repeat : int, optional
+        Number of waveform samples generated per latent frame.
+    wav_freq : int, optional
+        Audio sample rate used for logging generation speed.
+    """
+
     Q_ZERO = 128
 
     def __init__(self, wavenet: WaveNet, batch_size=1, cond_repeat=800, wav_freq=16000):
@@ -73,12 +115,43 @@ class WavenetGenerator(nn.Module):
         self.wavenet.eval()
 
     def forward(self, x, c=None):
+        """Forward one generation step through the wrapped WaveNet.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Current audio sample tensor.
+        c : torch.Tensor | None, optional
+            Conditioning tensor.
+
+        Returns
+        -------
+        torch.Tensor
+            WaveNet logits.
+        """
+
         return self.wavenet(x, c)
 
     def reset(self):
+        """Reset all causal queues.
+
+        Returns
+        -------
+        None
+            The queues are reset in place.
+        """
+
         return self.init()
 
     def init(self, batch_size=None):
+        """Initialize causal queues for generation.
+
+        Parameters
+        ----------
+        batch_size : int | None, optional
+            New batch size. When omitted, the current batch size is reused.
+        """
+
         if batch_size is not None:
             self.batch_size = batch_size
 
@@ -96,23 +169,53 @@ class WavenetGenerator(nn.Module):
 
     @staticmethod
     def softmax_and_sample(prediction, method="sample"):
+        """Sample or maximize WaveNet logits.
+
+        Parameters
+        ----------
+        prediction : torch.Tensor
+            Logits with shape ``(batch, 256)``.
+        method : {"sample", "max"}, optional
+            Sampling strategy.
+
+        Returns
+        -------
+        torch.Tensor
+            Sampled mu-law class ids.
+        """
+
         if method == "sample":
             probabilities = F.softmax(prediction)
             samples = torch.multinomial(probabilities, 1)
         elif method == "max":
             _, samples = torch.max(F.softmax(prediction), dim=1)
         else:
-            assert False, "Method not supported."
+            raise ValueError(f"Unsupported sampling method: {method}")
 
         return samples
 
     def generate(self, encodings, init=True, method="sample"):
+        """Generate a mu-law waveform from latent encodings.
+
+        Parameters
+        ----------
+        encodings : torch.Tensor
+            Latent conditioning with shape ``(batch, latent_d, time)``.
+        init : bool, optional
+            Whether to reset causal queues before generation.
+        method : {"sample", "max"}, optional
+            Sampling strategy.
+
+        Returns
+        -------
+        torch.Tensor
+            Generated mu-law samples with shape ``(batch, 1, samples)``.
+        """
+
         if init:
             self.init(encodings.size(0))
 
-        samples = torch.zeros(
-            encodings.size(0), 1, encodings.size(2) * self.cond_repeat + 1
-        )
+        samples = torch.zeros(encodings.size(0), 1, encodings.size(2) * self.cond_repeat + 1)
         samples.fill_(self.Q_ZERO)
         samples = samples.long()
         samples = samples.cuda() if encodings.is_cuda else samples
@@ -132,7 +235,7 @@ class WavenetGenerator(nn.Module):
                     samples[:, :, t + 1] = argmax
 
             logging.info(
-                f"{encodings.size(0)} samples of {encodings.size(2)*self.cond_repeat/self.wav_freq} seconds length "
+                f"{encodings.size(0)} samples of {encodings.size(2) * self.cond_repeat / self.wav_freq} seconds length "
                 f"generated in {time.time() - t0} seconds."
             )
 

@@ -1,0 +1,39 @@
+{
+  "checkpoint": {
+    "checkpoint_root": "checkpoints",
+    "pretrained_checkpoint": "checkpoints/base/bestmodel_0.pth"
+  },
+  "data": {
+    "batch_size": 32,
+    "data": [],
+    "data_aug": false,
+    "epoch_length": 10000,
+    "h5_dataset_name": "wav",
+    "num_workers": 10,
+    "segment_length": 16000
+  },
+  "description": "Decoder finetuning recipe with frozen encoder and WaveNet reconstruction cross entropy.",
+  "loss": {
+    "reconstruction": "mu_law_cross_entropy"
+  },
+  "metadata": {
+    "source_procedures": [
+      "frozen-encoder WaveNet decoder finetuning"
+    ]
+  },
+  "model": {
+    "legacy_encoder": true
+  },
+  "name": "recipe_decoder_finetune",
+  "optim": {
+    "grad_clip": null,
+    "lr": 0.0001,
+    "lr_decay": 0.98
+  },
+  "recipe": "decoder_finetune",
+  "runtime": {
+    "device": null,
+    "epochs": 60,
+    "seed": 1
+  }
+}

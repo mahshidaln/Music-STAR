@@ -1,0 +1,1 @@
+"""Music-STAR test package."""

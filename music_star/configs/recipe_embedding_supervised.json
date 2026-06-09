@@ -1,0 +1,47 @@
+{
+  "checkpoint": {
+    "checkpoint_root": "checkpoints",
+    "pretrained_checkpoint": "checkpoints/base/bestmodel_0.pth"
+  },
+  "data": {
+    "batch_size": 16,
+    "data": [],
+    "epoch_length": 10000,
+    "h5_dataset_name": "wav",
+    "mix": "data/reduced/mix",
+    "num_workers": 10,
+    "segment_length": 12000
+  },
+  "description": "Embedding-supervised method from the paper: train a mixture encoder to mimic a frozen universal encoder on one target stem.",
+  "loss": {
+    "latent": "l1"
+  },
+  "metadata": {
+    "paper_section": "3.3, 4.3",
+    "source_procedures": [
+      "embedding-supervised mixture encoder training",
+      "paired source-mixture and target-stem dataset loading"
+    ]
+  },
+  "model": {
+    "encoder_blocks": 4,
+    "encoder_channels": 128,
+    "encoder_func": "relu",
+    "encoder_layers": 14,
+    "encoder_pool": 800,
+    "latent_d": 64,
+    "legacy_encoder": true
+  },
+  "name": "recipe_embedding_supervised",
+  "optim": {
+    "grad_clip": null,
+    "lr": 0.0003,
+    "lr_decay": 0.98
+  },
+  "recipe": "embedding_supervised",
+  "runtime": {
+    "device": null,
+    "epochs": 100,
+    "seed": 1
+  }
+}
