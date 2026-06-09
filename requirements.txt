@@ -1,0 +1,14 @@
+# Runtime dependencies for pip-based installs.
+#
+# For development tools, prefer:
+#   pip install -e ".[dev]"
+librosa
+matplotlib
+h5py
+tqdm
+intervaltree
+pydub
+numpy<2
+scipy
+torch>=2.0,<2.3; sys_platform == "darwin" and platform_machine == "x86_64"
+torch>=2.0; sys_platform != "darwin" or platform_machine != "x86_64"

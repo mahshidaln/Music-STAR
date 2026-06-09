@@ -113,12 +113,12 @@ music-star-configs
 music-star-train-config --config-name recipe_embedding_supervised
 music-star-generate \
   --variation music_star_mixture_supervised \
-  --checkpoint-dir /Users/mahshid/Desktop/checkpoints/star-wave-ps2v \
+  --checkpoint-dir checkpoints/music-star-stem-ps-mix-to-vibraphone \
   --files path/to/input.wav \
   --output outputs/
 music-star-generate \
   --variation music_star_stem_supervised \
-  --checkpoint-dir /Users/mahshid/Desktop/checkpoints/star-double \
+  --checkpoint-dir checkpoints/music-star-stem-cv-mix-to-piano-string-two-decoder \
   --files path/to/input.wav \
   --output outputs/
 ```
